@@ -14,9 +14,10 @@ class Category(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        verbose_name="Родительская категория",
     )
     slug = models.SlugField(
-        ("Slug"),
+        ("URL фрагмент"),
         max_length=100,
         unique=True,
     )
@@ -39,15 +40,16 @@ class Product(models.Model):
     sale_price = models.DecimalField(
         ("Скидочная цена"), decimal_places=2, max_digits=10
     )
-    quantity = models.IntegerField(default=1)
+    quantity = models.IntegerField("Количество", default=1)
     category = models.ForeignKey(
         Category,
         related_name="product_list",
         on_delete=models.SET_NULL,
         null=True,
+        verbose_name="Категория",
     )
     slug = models.SlugField(
-        ("Slug"),
+        ("URL фрагмент"),
         max_length=100,
         unique=True,
     )

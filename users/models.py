@@ -53,6 +53,10 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+
     def __str__(self):
         return self.email
 
@@ -77,7 +81,7 @@ class Address(models.Model):
 
     class Meta:
         verbose_name = "Адрес"
-        verbose_name_plural = "Адреса"
+        verbose_name_plural = "Адресы"
         ordering = ("-created_ad",)
 
     def __str__(self):
