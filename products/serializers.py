@@ -40,7 +40,7 @@ class ProductReadSerializer(serializers.ModelSerializer):
 class ProductWriteSerializer(serializers.ModelSerializer):
     """Serializer class for product write."""
 
-    category = CategoryReadSerializer()
+    category = CategoryWriteSerializer()
 
     class Meta:
         model = Product
