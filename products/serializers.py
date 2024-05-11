@@ -22,8 +22,8 @@ class CategoryWriteSerializer(serializers.ModelSerializer):
             "slug",
         )
 
-    def create(self, validated_data):
-        instance, created = Category.objects.get_or_create(**validated_data)
+    def create(self, attrs):
+        instance, created = Category.objects.get_or_create(**attrs)
         return instance
 
 
@@ -54,18 +54,18 @@ class ProductWriteSerializer(serializers.ModelSerializer):
             "slug",
         )
 
-    def create(self, validated_data):
-        category = validated_data.pop("category")
+    def create(self, attrs):
+        category = attrs.pop("category")
         instance, created = Category.objects.get_or_create(**category)
-        product = Product.objects.create(category=instance, **validated_data)
+        product = Product.objects.create(category=instance, **attrs)
 
         return product
 
-    def update(self, instance, validated_data):
-        if "category" in validated_data:
+    def update(self, instance, attrs):
+        if "category" in attrs:
             nested_setializer = self.fields["category"]
             nested_instance = instance.category
-            nested_data = validated_data.pop("category")
+            nested_data = attrs.pop("category")
             nested_setializer.update(nested_instance, nested_data)
 
-        return super(ProductWriteSerializer, self).update(instance, validated_data)
+        return super(ProductWriteSerializer, self).update(instance, attrs)

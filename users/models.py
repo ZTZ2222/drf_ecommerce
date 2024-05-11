@@ -70,11 +70,10 @@ class Address(models.Model):
     user = models.ForeignKey(User, related_name="addresses", on_delete=models.CASCADE)
     address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
     default = models.BooleanField(default=False)
-    country = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
     street_address = models.CharField(max_length=100)
-    apartment_address = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20, blank=True)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
 
     created_ad = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -85,4 +84,4 @@ class Address(models.Model):
         ordering = ("-created_ad",)
 
     def __str__(self):
-        return self.user.get_username()
+        return self.street_address
