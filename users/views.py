@@ -9,6 +9,16 @@ from .permissions import IsUserAddressOwner
 
 
 class UserRegisterView(GenericAPIView):
+    """
+    Register a new user
+
+    Args:
+        request (Request): The HTTP request object
+
+    Returns:
+        Response: The HTTP response object with the serialized data and status code
+    """
+
     serializer_class = UserRegistrationSerializer
     permission_classes = (AllowAny,)
 

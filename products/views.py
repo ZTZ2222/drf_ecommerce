@@ -4,10 +4,9 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from .models import Category, Product
 from .serializers import (
-    CategoryReadSerializer,
-    CategoryWriteSerializer,
-    ProductReadSerializer,
-    ProductWriteSerializer,
+    CategorySerializer,
+    ProductWriteOnlySerializer,
+    ProductReadOnlySerializer,
 )
 
 
@@ -35,40 +34,22 @@ class CategoryViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Category.objects.all()
-
-    def get_serializer_class(self):
-        """
-        Determines and returns the appropriate serializer class based on the action being performed.
-
-        Parameters:
-            self (object): The instance of the class.
-
-        Returns:
-            CategoryWriteSerializer: If the action is "create", "update", "partial_update", or "destroy".
-            CategoryReadSerializer: Otherwise.
-        """
-        if self.action in ("create", "update", "partial_update", "destroy"):
-            return CategoryWriteSerializer
-        return CategoryReadSerializer
+    serializer_class = CategorySerializer
+    lookup_field = "slug"
 
     def get_permissions(self):
-        """
-        A function that returns permissions based on the action being performed.
-
-        Parameters:
-            self (object): The instance of the class.
-
-        Returns:
-            list: A list of permissions based on the action.
-        """
-        if self.action in ("create", "update", "partial_update", "destroy"):
-            return [permissions.IsAdminUser()]
-        return [permissions.AllowAny()]
+        return [
+            (
+                permissions.IsAdminUser()
+                if self.action in ("create", "update", "partial_update", "destroy")
+                else permissions.AllowAny()
+            )
+        ]
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
-    CRUD for products.
+    Products viewset.
 
     create:
     Create a new product.
@@ -87,39 +68,36 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     list:
     List all products.
-
     """
 
+    queryset = Product.objects.all()
     pagination_class = LimitOffsetPagination
     lookup_field = "slug"
 
     def get_queryset(self):
-        """
-        Returns a queryset of products filtered by the specified category.
-
-        Parameters:
-            self (object): The instance of the class.
-
-        Returns:
-            queryset: A queryset of products filtered by the specified category.
-        """
-        queryset = Product.objects.all()
-        category = self.request.query_params.get("category")
-
-        if category:
-            category_ids = Category.objects.filter(
-                Q(id=category) | Q(parent_category_id=category)
-            ).values_list("id", flat=True)
-            queryset = queryset.filter(category_id__in=category_ids)
-
-        return queryset
+        """Filter products by category if specified."""
+        category_id = self.request.query_params.get("category")
+        if category_id:
+            return self.queryset.filter(
+                category_id__in=Category.objects.filter(
+                    Q(id=category_id) | Q(parent_category_id=category_id)
+                ).values_list("id", flat=True)
+            )
+        return self.queryset
 
     def get_serializer_class(self):
-        if self.action in ("create", "update", "partial_update", "destroy"):
-            return ProductWriteSerializer
-        return ProductReadSerializer
+        return (
+            ProductWriteOnlySerializer
+            if self.action in ("create", "update", "partial_update", "destroy")
+            else ProductReadOnlySerializer
+        )
 
     def get_permissions(self):
-        if self.action in ("create", "update", "partial_update", "destroy"):
-            return [permissions.IsAdminUser()]
-        return [permissions.AllowAny()]
+        """Set permissions based on action."""
+        return [
+            (
+                permissions.IsAdminUser()
+                if self.action in ("create", "update", "partial_update", "destroy")
+                else permissions.AllowAny()
+            )
+        ]

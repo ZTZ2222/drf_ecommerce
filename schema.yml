@@ -1,0 +1,1576 @@
+openapi: 3.0.3
+info:
+  title: Ecommerce API
+  version: 1.0.0
+  description: An Ecommerce API built using Django Rest Framework
+paths:
+  /api/categories/:
+    get:
+      operationId: categories_list
+      description: |-
+        CRUD for categories.
+
+        create:
+        Create a new category.
+
+        update:
+        Update an existing category.
+
+        partial_update:
+        Partially update an existing category.
+
+        destroy:
+        Delete a category.
+
+        retrieve:
+        Retrieve a category.
+
+        list:
+        List all categories.
+      tags:
+      - categories
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryRead'
+          description: ''
+    post:
+      operationId: categories_create
+      description: |-
+        CRUD for categories.
+
+        create:
+        Create a new category.
+
+        update:
+        Update an existing category.
+
+        partial_update:
+        Partially update an existing category.
+
+        destroy:
+        Delete a category.
+
+        retrieve:
+        Retrieve a category.
+
+        list:
+        List all categories.
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWrite'
+          description: ''
+  /api/categories/{id}/:
+    get:
+      operationId: categories_retrieve
+      description: |-
+        CRUD for categories.
+
+        create:
+        Create a new category.
+
+        update:
+        Update an existing category.
+
+        partial_update:
+        Partially update an existing category.
+
+        destroy:
+        Delete a category.
+
+        retrieve:
+        Retrieve a category.
+
+        list:
+        List all categories.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Категория.
+        required: true
+      tags:
+      - categories
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryRead'
+          description: ''
+    put:
+      operationId: categories_update
+      description: |-
+        CRUD for categories.
+
+        create:
+        Create a new category.
+
+        update:
+        Update an existing category.
+
+        partial_update:
+        Partially update an existing category.
+
+        destroy:
+        Delete a category.
+
+        retrieve:
+        Retrieve a category.
+
+        list:
+        List all categories.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Категория.
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWrite'
+          description: ''
+    patch:
+      operationId: categories_partial_update
+      description: |-
+        CRUD for categories.
+
+        create:
+        Create a new category.
+
+        update:
+        Update an existing category.
+
+        partial_update:
+        Partially update an existing category.
+
+        destroy:
+        Delete a category.
+
+        retrieve:
+        Retrieve a category.
+
+        list:
+        List all categories.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Категория.
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryWrite'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWrite'
+          description: ''
+    delete:
+      operationId: categories_destroy
+      description: |-
+        CRUD for categories.
+
+        create:
+        Create a new category.
+
+        update:
+        Update an existing category.
+
+        partial_update:
+        Partially update an existing category.
+
+        destroy:
+        Delete a category.
+
+        retrieve:
+        Retrieve a category.
+
+        list:
+        List all categories.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Категория.
+        required: true
+      tags:
+      - categories
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/orders/:
+    get:
+      operationId: orders_list
+      description: CRUD for orders that belong to a specific buyer
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderRead'
+          description: ''
+    post:
+      operationId: orders_create
+      description: CRUD for orders that belong to a specific buyer
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWrite'
+          description: ''
+  /api/orders/{order_id}/order-items/:
+    get:
+      operationId: orders_order_items_list
+      description: CRUD for order items that belong to a specific order
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderItem'
+          description: ''
+    post:
+      operationId: orders_order_items_create
+      description: CRUD for order items that belong to a specific order
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderItem'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+  /api/orders/{order_id}/order-items/{id}/:
+    get:
+      operationId: orders_order_items_retrieve
+      description: CRUD for order items that belong to a specific order
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция заказа.
+        required: true
+      - in: path
+        name: order_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+    put:
+      operationId: orders_order_items_update
+      description: CRUD for order items that belong to a specific order
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция заказа.
+        required: true
+      - in: path
+        name: order_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderItem'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+    patch:
+      operationId: orders_order_items_partial_update
+      description: CRUD for order items that belong to a specific order
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция заказа.
+        required: true
+      - in: path
+        name: order_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderItem'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+    delete:
+      operationId: orders_order_items_destroy
+      description: CRUD for order items that belong to a specific order
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция заказа.
+        required: true
+      - in: path
+        name: order_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/orders/{id}/:
+    get:
+      operationId: orders_retrieve
+      description: CRUD for orders that belong to a specific buyer
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заказ.
+        required: true
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRead'
+          description: ''
+    put:
+      operationId: orders_update
+      description: CRUD for orders that belong to a specific buyer
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заказ.
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWrite'
+          description: ''
+    patch:
+      operationId: orders_partial_update
+      description: CRUD for orders that belong to a specific buyer
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заказ.
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderWrite'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWrite'
+          description: ''
+    delete:
+      operationId: orders_destroy
+      description: CRUD for orders that belong to a specific buyer
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заказ.
+        required: true
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/products/:
+    get:
+      operationId: products_list
+      description: CRUD for products.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - products
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductReadList'
+          description: ''
+    post:
+      operationId: products_create
+      description: CRUD for products.
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductWrite'
+          description: ''
+  /api/products/{slug}/:
+    get:
+      operationId: products_retrieve
+      description: CRUD for products.
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: URL фрагмент
+        required: true
+      tags:
+      - products
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductRead'
+          description: ''
+    put:
+      operationId: products_update
+      description: CRUD for products.
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: URL фрагмент
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductWrite'
+          description: ''
+    patch:
+      operationId: products_partial_update
+      description: CRUD for products.
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: URL фрагмент
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProductWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProductWrite'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductWrite'
+          description: ''
+    delete:
+      operationId: products_destroy
+      description: CRUD for products.
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: URL фрагмент
+        required: true
+      tags:
+      - products
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/login/:
+    post:
+      operationId: users_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve
+      description: Get user details
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/me/address/:
+    get:
+      operationId: users_me_address_list
+      description: List and Retrieve user addresses
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressReadOnly'
+          description: ''
+  /api/users/me/address/{id}/:
+    get:
+      operationId: users_me_address_retrieve
+      description: List and Retrieve user addresses
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressReadOnly'
+          description: ''
+  /api/users/register/:
+    post:
+      operationId: users_register_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegistration'
+          description: ''
+  /api/users/token/refresh/:
+    post:
+      operationId: users_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    AddressReadOnly:
+      type: object
+      description: Serializer class to seralize Address model
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: string
+          readOnly: true
+        address_type:
+          $ref: '#/components/schemas/AddressTypeEnum'
+        default:
+          type: boolean
+        street_address:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 20
+        city:
+          type: string
+          maxLength: 100
+        country:
+          type: string
+          maxLength: 100
+        created_ad:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address_type
+      - city
+      - country
+      - created_ad
+      - id
+      - street_address
+      - updated_at
+      - user
+    AddressTypeEnum:
+      enum:
+      - B
+      - S
+      type: string
+      description: |-
+        * `B` - billing
+        * `S` - shipping
+    BillingAddress:
+      type: object
+      description: |-
+        Serializer class to seralize address of type billing
+
+        For billing address, automatically set address type to billing
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        address_type:
+          allOf:
+          - $ref: '#/components/schemas/AddressTypeEnum'
+          readOnly: true
+        default:
+          type: boolean
+        street_address:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 20
+        city:
+          type: string
+          maxLength: 100
+        country:
+          type: string
+          maxLength: 100
+        created_ad:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address_type
+      - city
+      - country
+      - created_ad
+      - id
+      - street_address
+      - updated_at
+    CategoryRead:
+      type: object
+      description: Serializer class for category read.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Категория
+          maxLength: 100
+        slug:
+          type: string
+          title: URL фрагмент
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        parent_category:
+          type: string
+          title: Родительская категория
+          nullable: true
+      required:
+      - created_at
+      - id
+      - name
+      - slug
+      - updated_at
+    CategoryWrite:
+      type: object
+      description: Serializer class for category write.
+      properties:
+        name:
+          type: string
+          title: Категория
+          maxLength: 100
+        parent_category:
+          type: string
+          title: Родительская категория
+          nullable: true
+        slug:
+          type: string
+          title: URL фрагмент
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+      required:
+      - name
+      - slug
+    OrderItem:
+      type: object
+      description: Serializer class for OrderItem model
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        price:
+          type: number
+          format: double
+          description: |-
+            Get the sale price of the product
+
+            Args:
+                obj (OrderItem): The order item
+
+            Returns:
+                float: The sale price of the product
+          readOnly: true
+        cost:
+          type: number
+          format: double
+          description: |-
+            Get the cost of the order item
+
+            Args:
+                obj (OrderItem): The order item
+
+            Returns:
+                float: The cost of the order item
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        order:
+          type: integer
+        product:
+          type: integer
+      required:
+      - cost
+      - created_at
+      - id
+      - order
+      - price
+      - product
+      - updated_at
+    OrderRead:
+      type: object
+      description: Serializer class for Order model
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        buyer:
+          type: string
+          readOnly: true
+        order_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+          readOnly: true
+        total_cost:
+          type: number
+          format: double
+          description: |-
+            Get the total cost of the order
+
+            Args:
+                            obj (Order): The order
+
+            Returns:
+                            float: The total cost of the order
+          readOnly: true
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/ShippingAddress'
+          readOnly: true
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/BillingAddress'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - billing_address
+      - buyer
+      - created_at
+      - id
+      - order_items
+      - shipping_address
+      - total_cost
+      - updated_at
+    OrderWrite:
+      type: object
+      description: |-
+        Serializer class for creating orders and order items
+
+        Shipping address, billing address and payment are not included here
+        They will be created/updated on checkout
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        shipping_address:
+          type: integer
+          nullable: true
+        billing_address:
+          type: integer
+          nullable: true
+      required:
+      - created_at
+      - id
+      - order_items
+      - status
+      - updated_at
+    PaginatedProductReadList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductRead'
+    PatchedCategoryWrite:
+      type: object
+      description: Serializer class for category write.
+      properties:
+        name:
+          type: string
+          title: Категория
+          maxLength: 100
+        parent_category:
+          type: string
+          title: Родительская категория
+          nullable: true
+        slug:
+          type: string
+          title: URL фрагмент
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+    PatchedOrderItem:
+      type: object
+      description: Serializer class for OrderItem model
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        price:
+          type: number
+          format: double
+          description: |-
+            Get the sale price of the product
+
+            Args:
+                obj (OrderItem): The order item
+
+            Returns:
+                float: The sale price of the product
+          readOnly: true
+        cost:
+          type: number
+          format: double
+          description: |-
+            Get the cost of the order item
+
+            Args:
+                obj (OrderItem): The order item
+
+            Returns:
+                float: The cost of the order item
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        order:
+          type: integer
+        product:
+          type: integer
+    PatchedOrderWrite:
+      type: object
+      description: |-
+        Serializer class for creating orders and order items
+
+        Shipping address, billing address and payment are not included here
+        They will be created/updated on checkout
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        shipping_address:
+          type: integer
+          nullable: true
+        billing_address:
+          type: integer
+          nullable: true
+    PatchedProductWrite:
+      type: object
+      description: Serializer class for product write.
+      properties:
+        name:
+          type: string
+          title: Название
+          maxLength: 100
+        description:
+          type: string
+          title: Описание
+        base_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Обычная цена
+        sale_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Скидочная цена
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Количество
+        category:
+          $ref: '#/components/schemas/CategoryWrite'
+        slug:
+          type: string
+          title: URL фрагмент
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+    ProductRead:
+      type: object
+      description: Serializer class for product read.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          title: Название
+          maxLength: 100
+        description:
+          type: string
+          title: Описание
+        base_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Обычная цена
+        sale_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Скидочная цена
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Количество
+        slug:
+          type: string
+          title: URL фрагмент
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - base_price
+      - category
+      - created_at
+      - id
+      - name
+      - sale_price
+      - slug
+      - updated_at
+    ProductWrite:
+      type: object
+      description: Serializer class for product write.
+      properties:
+        name:
+          type: string
+          title: Название
+          maxLength: 100
+        description:
+          type: string
+          title: Описание
+        base_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Обычная цена
+        sale_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Скидочная цена
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Количество
+        category:
+          $ref: '#/components/schemas/CategoryWrite'
+        slug:
+          type: string
+          title: URL фрагмент
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+      required:
+      - base_price
+      - category
+      - name
+      - sale_price
+      - slug
+    ShippingAddress:
+      type: object
+      description: |-
+        Serializer class to seralize address of type shipping
+
+        For shipping address, automatically set address type to shipping
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        address_type:
+          allOf:
+          - $ref: '#/components/schemas/AddressTypeEnum'
+          readOnly: true
+        default:
+          type: boolean
+        street_address:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 20
+        city:
+          type: string
+          maxLength: 100
+        country:
+          type: string
+          maxLength: 100
+        created_ad:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address_type
+      - city
+      - country
+      - created_ad
+      - id
+      - street_address
+      - updated_at
+    StatusEnum:
+      enum:
+      - P
+      - C
+      type: string
+      description: |-
+        * `P` - pending
+        * `C` - completed
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    User:
+      type: object
+      description: Serializer class to seralize User model
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressReadOnly'
+          readOnly: true
+      required:
+      - addresses
+      - email
+      - id
+    UserRegistration:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        password1:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password1
+      - password2
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

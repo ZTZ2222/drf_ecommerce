@@ -15,7 +15,7 @@ router.register(r"", AddressViewSet, basename="addresses")
 
 urlpatterns = [
     path("register/", UserRegisterView.as_view(), name="register"),
-    path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("login/", TokenObtainPairView.as_view(), name="login"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("me/", UserRetrieveView.as_view(), name="user_detail"),
     path("me/address/", include(router.urls)),

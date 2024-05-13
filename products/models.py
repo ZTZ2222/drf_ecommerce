@@ -1,4 +1,6 @@
+from decimal import Decimal
 from django.db import models
+from rest_framework.fields import MinValueValidator
 
 
 class Category(models.Model):
@@ -9,8 +11,6 @@ class Category(models.Model):
     )
     parent_category = models.ForeignKey(
         "self",
-        to_field="name",
-        related_name="Подкатегории",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -35,17 +35,26 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(("Название"), max_length=100)
-    description = models.TextField(("Описание"), blank=True)
-    base_price = models.DecimalField(("Обычная цена"), decimal_places=2, max_digits=10)
-    sale_price = models.DecimalField(
-        ("Скидочная цена"), decimal_places=2, max_digits=10
+    description = models.TextField("Описание")
+    base_price = models.DecimalField(
+        ("Обычная цена"),
+        decimal_places=2,
+        max_digits=10,
+        validators=[MinValueValidator(Decimal("1"))],
     )
-    quantity = models.IntegerField("Количество", default=1)
+    sale_price = models.DecimalField(
+        ("Скидочная цена"),
+        decimal_places=2,
+        max_digits=10,
+        validators=[MinValueValidator(Decimal("1"))],
+    )
+    quantity = models.PositiveIntegerField("Количество", default=1)
     category = models.ForeignKey(
         Category,
         related_name="product_list",
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
         verbose_name="Категория",
     )
     slug = models.SlugField(

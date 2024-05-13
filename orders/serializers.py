@@ -66,7 +66,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
         return attrs
 
-    def get_price(self, obj):
+    def get_price(self, obj) -> float:
         """
         Get the sale price of the product
 
@@ -78,7 +78,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         """
         return obj.product.sale_price or obj.product.base_price
 
-    def get_cost(self, obj):
+    def get_cost(self, obj) -> float:
         """
         Get the cost of the order item
 
@@ -110,7 +110,7 @@ class OrderReadSerializer(serializers.ModelSerializer):
         model = Order
         fields = "__all__"
 
-    def get_total_cost(self, obj):
+    def get_total_cost(self, obj) -> float:
         """
         Get the total cost of the order
 
