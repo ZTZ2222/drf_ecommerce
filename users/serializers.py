@@ -14,17 +14,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = ("email", "password1", "password2")
         extra_kwargs = {"password": {"write_only": True}}
 
-    def validate(self, attrs):
-        if attrs["password1"] != attrs["password2"]:
+    def validate(self, validated_data):
+        if validated_data["password1"] != validated_data["password2"]:
             raise serializers.ValidationError("Passwords do not match!")
 
-        password = attrs.get("password1", "")
+        password = validated_data.get("password1", "")
         if len(password) < 8:
             raise serializers.ValidationError(
                 "Passwords must be at least 8 characters!"
             )
 
-        return attrs
+        return validated_data
 
     def create(self, validated_data) -> User:
         password = validated_data.pop("password1")
@@ -37,9 +37,9 @@ class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
-    def validate(self, attrs):
-        email = attrs.get("email")
-        password = attrs.get("password")
+    def validate(self, validated_data):
+        email = validated_data.get("email")
+        password = validated_data.get("password")
 
         if not email or not password:
             raise serializers.ValidationError("Email and password are required.")
@@ -52,20 +52,22 @@ class UserLoginSerializer(serializers.Serializer):
         if not user.is_active:
             raise AccountDisabledException()
 
-        attrs["user"] = user
-        return attrs
+        validated_data["user"] = user
+        return validated_data
 
 
-class AddressReadOnlySerializer(serializers.ModelSerializer):
-    """
-    Serializer class to seralize Address model
-    """
-
-    user = serializers.CharField(source="user.get_full_name", read_only=True)
+class AddressWriteSerializer(serializers.ModelSerializer):
+    """Serializer class to seralize address"""
 
     class Meta:
         model = Address
         fields = "__all__"
+
+
+class AddressReadOnlySerializer(AddressWriteSerializer):
+    """Serializer class to seralize Address model with read only fields"""
+
+    user = serializers.CharField(source="user.email", read_only=True)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -78,45 +80,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "email", "first_name", "last_name", "addresses")
-
-
-class ShippingAddressSerializer(serializers.ModelSerializer):
-    """
-    Serializer class to seralize address of type shipping
-
-    For shipping address, automatically set address type to shipping
-    """
-
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    class Meta:
-        model = Address
-        fields = "__all__"
-        read_only_fields = ("address_type",)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation["address_type"] = "S"
-
-        return representation
-
-
-class BillingAddressSerializer(serializers.ModelSerializer):
-    """
-    Serializer class to seralize address of type billing
-
-    For billing address, automatically set address type to billing
-    """
-
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    class Meta:
-        model = Address
-        fields = "__all__"
-        read_only_fields = ("address_type",)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation["address_type"] = "B"
-
-        return representation

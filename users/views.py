@@ -1,6 +1,6 @@
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -43,13 +43,17 @@ class UserRetrieveView(RetrieveAPIView):
         return self.request.user
 
 
-class AddressViewSet(ReadOnlyModelViewSet):
+class AddressViewSet(ModelViewSet):
     """
     List and Retrieve user addresses
     """
 
     permission_classes = (IsUserAddressOwner,)
-    serializer_class = AddressReadOnlySerializer
 
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action in ("create", "update", "partial_update", "destroy"):
+            return AddressWriteSerializer
+        return AddressReadOnlySerializer

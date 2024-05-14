@@ -1,0 +1,45 @@
+version: "3.9"
+services:
+  postgresql:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    restart: always
+    networks:
+      - default-network
+
+  backend:
+    build:
+      context: .
+    command: gunicorn root.wsgi:application --bind 0.0.0.0:8000
+    networks:
+      - default-network
+    env_file:
+      - ./.env
+    depends_on:
+      - postgresql
+    expose:
+      - 8000
+    restart: always
+  
+  nginx:
+    build:
+      context: ./nginx
+    networks:
+      - default-network
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    volumes:
+      - ./static:/project/static
+    restart: always
+
+networks:
+  default-network:

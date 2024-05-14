@@ -1,5 +1,6 @@
 from django.db.models import Q
-from rest_framework import viewsets, permissions
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework.pagination import LimitOffsetPagination
 
 from .models import Category, Product
@@ -10,7 +11,7 @@ from .serializers import (
 )
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(ModelViewSet):
     """
     CRUD for categories.
 
@@ -38,16 +39,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     lookup_field = "slug"
 
     def get_permissions(self):
-        return [
-            (
-                permissions.IsAdminUser()
-                if self.action in ("create", "update", "partial_update", "destroy")
-                else permissions.AllowAny()
-            )
-        ]
+        if self.action in ("create", "update", "partial_update", "destroy"):
+            return [IsAdminUser()]
+        return [AllowAny()]
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(ModelViewSet):
     """
     Products viewset.
 
@@ -86,18 +83,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         return self.queryset
 
     def get_serializer_class(self):
-        return (
-            ProductWriteOnlySerializer
-            if self.action in ("create", "update", "partial_update", "destroy")
-            else ProductReadOnlySerializer
-        )
+        if self.action in ("create", "update", "partial_update", "destroy"):
+            return ProductWriteOnlySerializer
+        return ProductReadOnlySerializer
 
     def get_permissions(self):
-        """Set permissions based on action."""
-        return [
-            (
-                permissions.IsAdminUser()
-                if self.action in ("create", "update", "partial_update", "destroy")
-                else permissions.AllowAny()
-            )
-        ]
+        if self.action in ("create", "update", "partial_update", "destroy"):
+            return [IsAdminUser()]
+        return [AllowAny()]

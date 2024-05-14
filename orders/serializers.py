@@ -1,27 +1,18 @@
 from rest_framework import serializers
 
-from users.serializers import BillingAddressSerializer, ShippingAddressSerializer
+from users.serializers import AddressReadOnlySerializer
 
 from .models import Order, OrderItem
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    """
-    Serializer class for OrderItem model
-    """
-
-    price = serializers.SerializerMethodField()
-    cost = serializers.SerializerMethodField()
+    """Serializer class for OrderItem model"""
 
     class Meta:
-        """
-        Meta class for OrderItemSerializer
-        """
-
         model = OrderItem
         fields = "__all__"
 
-    def validate(self, attrs):
+    def validate(self, validated_data):
         """
         Validate the order item data
 
@@ -31,7 +22,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         Ensure that the user is authenticated
 
         Args:
-            attrs (dict): The order item data
+            validated_data (dict): The order item data
 
         Returns:
             dict: The validated order item data
@@ -42,11 +33,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
             serializers.ValidationError: If the product is already in the order
             serializers.ValidationError: If the user is not authenticated
         """
-        order_quantity = attrs.get("quantity")
-        product_quantity = attrs.get("product").quantity
+        order_quantity = validated_data.get("quantity")
+        product_quantity = validated_data.get("product").quantity
 
         order_id = self.context["view"].kwargs.get("order_id")
-        product = attrs.get("product")
+        product = validated_data.get("product")
         current_item = OrderItem.objects.filter(order__id=order_id, product=product)
 
         if order_quantity > product_quantity:
@@ -64,63 +55,20 @@ class OrderItemSerializer(serializers.ModelSerializer):
         if self.context["request"].user.is_anonymous:
             raise serializers.ValidationError("User is not authenticated")
 
-        return attrs
-
-    def get_price(self, obj) -> float:
-        """
-        Get the sale price of the product
-
-        Args:
-            obj (OrderItem): The order item
-
-        Returns:
-            float: The sale price of the product
-        """
-        return obj.product.sale_price or obj.product.base_price
-
-    def get_cost(self, obj) -> float:
-        """
-        Get the cost of the order item
-
-        Args:
-            obj (OrderItem): The order item
-
-        Returns:
-            float: The cost of the order item
-        """
-        return obj.cost
+        return validated_data
 
 
 class OrderReadSerializer(serializers.ModelSerializer):
-    """
-    Serializer class for Order model
-    """
+    """Serializer class for Order model"""
 
     buyer = serializers.CharField(source="buyer.email", read_only=True)
     order_items = OrderItemSerializer(many=True, read_only=True)
-    total_cost = serializers.SerializerMethodField()
-    shipping_address = ShippingAddressSerializer(read_only=True)
-    billing_address = BillingAddressSerializer(read_only=True)
+    shipping_address = AddressReadOnlySerializer(read_only=True)
+    billing_address = AddressReadOnlySerializer(read_only=True)
 
     class Meta:
-        """
-        Meta class for OrderReadSerializer
-        """
-
         model = Order
         fields = "__all__"
-
-    def get_total_cost(self, obj) -> float:
-        """
-        Get the total cost of the order
-
-        Args:
-                        obj (Order): The order
-
-        Returns:
-                        float: The total cost of the order
-        """
-        return obj.total_cost
 
 
 class OrderWriteSerializer(serializers.ModelSerializer):
@@ -139,17 +87,17 @@ class OrderWriteSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("status",)
 
-    def create(self, attrs):
-        order_items = attrs.pop("order_items")
-        order = Order.objects.create(**attrs)
+    def create(self, validated_data):
+        order_items = validated_data.pop("order_items")
+        order = Order.objects.create(**validated_data)
 
         for order_item in order_items:
             OrderItem.objects.create(order=order, **order_item)
 
         return order
 
-    def update(self, instance, attrs):
-        orders_data = attrs.pop("order_items", None)
+    def update(self, instance, validated_data):
+        orders_data = validated_data.pop("order_items", None)
         orders = list((instance.order_items).all())
 
         if orders_data:

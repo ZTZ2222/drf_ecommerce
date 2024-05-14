@@ -6,7 +6,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("products.urls", namespace="products")),
     path("api/users/", include("users.urls", namespace="users")),
-    path("api/orders/", include("orders.urls", namespace="orders")),
+    path("api/", include("orders.urls", namespace="orders")),
     # API Docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

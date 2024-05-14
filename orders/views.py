@@ -1,39 +1,17 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework.viewsets import ModelViewSet
 
 from orders.permissions import (
     IsOrderByBuyerOrAdmin,
-    IsOrderItemByBuyerOrAdmin,
-    IsOrderItemPending,
     IsOrderPending,
 )
 from orders.serializers import (
-    OrderItemSerializer,
     OrderWriteSerializer,
     OrderReadSerializer,
 )
-from orders.models import OrderItem, Order
+from orders.models import Order
 
 
-class OrderItemViewSet(viewsets.ModelViewSet):
-    """CRUD for order items that belong to a specific order"""
-
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
-    permission_classes = [IsOrderItemByBuyerOrAdmin, IsOrderItemPending]
-
-    def perform_create(self, serializer):
-        order = get_object_or_404(Order, id=self.kwargs.get("order_id"))
-        serializer.save(order=order)
-
-    def get_permissions(self):
-        if self.action in ("create", "update", "partial_update", "destroy"):
-            self.permission_classes += [IsOrderItemPending]
-
-        return super().get_permissions()
-
-
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(ModelViewSet):
     """CRUD for orders that belong to a specific buyer"""
 
     queryset = Order.objects.all()
@@ -42,11 +20,9 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update", "destroy"):
             return OrderWriteSerializer
-
         return OrderReadSerializer
 
     def get_permissions(self):
         if self.action in ("update", "partial_update", "destroy"):
             self.permission_classes += [IsOrderPending]
-
         return super().get_permissions()
